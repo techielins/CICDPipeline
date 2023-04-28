@@ -58,6 +58,9 @@ Paste the password copied from your terminal into the field provided on the Jenk
 * Install plugins:
 
 -- Docker Pipeline plugin
+-- Maven Integration plugin
+-- Pipeline plugin
+
 
 *Docker Slave Configuration*
 
