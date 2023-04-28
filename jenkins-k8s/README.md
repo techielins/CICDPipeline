@@ -19,7 +19,7 @@ $ amazon-linux-extras
 
 $ sudo amazon-linux-extras enable java-openjdk11
 
-$ sudo yum clean metadata && sudo yum install java-openjdk11
+$ sudo amazon-linux-extras install java-openjdk11
 
 * Add the Jenkins the repository using the command below:
 
@@ -27,7 +27,7 @@ $ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stabl
 
 * Add the key file from Jenkins CI to enable the Jenkins installation from the package:
 
-$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key (This command might change over the time. Please check Jenkins release page to get the updated command)
 
 $ sudo amazon-linux-extras install epel
 
@@ -65,13 +65,13 @@ Run the below command to Install Docker
 
 $ sudo yum update
 
-$ sudo yum install docker.io
+$ sudo yum install docker
 
 Grant Jenkins user and ec2-user user permission to docker deamon.
 
-$ sudo usermod -aG docker jenkins
+$ sudo usermod -a -G docker jenkins
 
-$ sudo usermod -aG docker ec2-user 
+$ sudo usermod -a -G docker ec2-user
 
 $ sudo systemctl restart docker
 
