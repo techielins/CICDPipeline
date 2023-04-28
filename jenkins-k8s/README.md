@@ -45,7 +45,7 @@ $ sudo systemctl status jenkins
 
 * Configuring Jenkins:
 
-* http://<your_server_public_DNS_address>:8080
+http://<your_server_public_DNS_address>:8080
 
 This will open the Jenkins configuration page which will get you started.
 
