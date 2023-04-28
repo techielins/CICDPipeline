@@ -5,7 +5,7 @@ This end-to-end Jenkins pipeline will automate the entire CI/CD process for a Ja
 
 *Setup EC2 instance in AWS*
 
-* Log in to the AWS account, click on the Services menu at the top right corner of the page, a dropdown menu will follow, Select Compute and a submenu will pop up, select EC2 > Proceed to Launch instances. > Once we’re on the instances page, The first step is choosing the Amazon Machine Image (AMI) > and proceed with the configuration and provision the instance.
+* Log in to the AWS account, click on the Services menu at the top right corner of the page, a dropdown menu will follow, Select Compute and a submenu will pop up, select EC2 > Proceed to Launch instances. > Once we’re on the instances page, The first step is choosing the Amazon Machine Image (AMI) > Amazon Linux 2 AMI > and proceed with the configuration and provision the instance.
 
 *Installing Jenkins on an EC2 Instance*
 
