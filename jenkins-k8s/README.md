@@ -188,11 +188,6 @@ Username is admin
 To retrive the password for admin, use the folliwng command
 
 ```
-$ kubectl get secret argocd-secret -o jsonpath='{.data.admin\.password}' | base64 -d
-```
-Note : It is observed that argocd-cluster secret overrides the argocd-secret, so you may use the following command as well in case if you're not able to login using the password shown in the first command.
-
-```
 $ kubectl get secret techielins-argocd-cluster -o jsonpath='{.data.admin\.password}' | base64 -d
 ```
 
