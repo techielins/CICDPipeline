@@ -8,7 +8,7 @@ This is a simple Sprint Boot based Java application that can be built using Mave
 Checkout the repo and move to the directory
 
 ```
-git clone https://github.com/techielins/CICDPipeline.git/jenkins-k8s/sprint-boot-app
+git clone https://github.com/techielins/CICDPipeline.git
 
 cd jenkins-k8s/sprint-boot-app
 ```
