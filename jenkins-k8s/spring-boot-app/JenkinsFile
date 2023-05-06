@@ -4,7 +4,7 @@ pipeline {
 
   agent {
     docker {
-      image 'techielins/jenkins-mvn-jdk11:v1'
+      image 'techielins/docker-jenkins-agent:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
@@ -12,11 +12,14 @@ pipeline {
   stages {
       
     // checkout the code  
-    stage('Checkout') {
+    stage('Get Code') {
       steps {
-        sh 'git --version'
+       sh 'cat /etc/issue'
+       sh 'git --version'
        sh 'which git'
        sh 'echo $PATH'
+       sh 'docker --version'
+       sh 'mvn --version'
 
         git branch: 'main', url: 'https://github.com/techielins/CICDPipeline.git'
               }
@@ -27,7 +30,7 @@ pipeline {
       steps {
         
         sh 'cd jenkins-k8s/spring-boot-app && mvn clean package'
-        sh 'ls -ltr'
+        sh 'ls -ltr jenkins-k8s'
       }
     }
 stage('Build and Push Docker Image') {
