@@ -27,11 +27,9 @@ pipeline {
       steps {
         
         sh 'cd jenkins-k8s/spring-boot-app && mvn clean package'
-        sh 'ls -ltr jenkins-k8s'
+        sh 'ls -ltr'
       }
     }
-  }
-
 stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
@@ -48,5 +46,8 @@ stage('Build and Push Docker Image') {
         }
       }
     }
+
+  }
+
     
 }
