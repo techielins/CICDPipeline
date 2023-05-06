@@ -82,6 +82,10 @@ Once you are done with the above steps, please restart Jenkins.
 
 $ sudo systemctl restart jenkins
 
+Enable docker during system startup
+
+$ sudo systemctl enable docker
+
 The docker agent configuration is now completed.
 
 
