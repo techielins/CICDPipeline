@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
-  metadata:
+metadata:
     name: spring-boot-app-service
-  spec:
+spec:
     type: NodePort
     ports:
     - name: http
