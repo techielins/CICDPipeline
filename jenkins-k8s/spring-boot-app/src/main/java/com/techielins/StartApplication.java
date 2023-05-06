@@ -12,7 +12,7 @@ public class StartApplication {
 
     @GetMapping("/")
     public String index(final Model model) {
-        model.addAttribute("title", "Placeholder page powered by  sprint boot application.V2");
+        model.addAttribute("title", "Placeholder page powered by  sprint boot application.");
         model.addAttribute("msg", "This application is deployed on to Kubernetes using Argo CD");
         return "index";
     }
