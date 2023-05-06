@@ -27,7 +27,7 @@ pipeline {
       steps {
         
         sh 'cd jenkins-k8s/spring-boot-app && mvn clean package'
-        sh 'ls -ltr'
+        sh 'ls -ltr jenkins-k8s'
       }
     }
   }
