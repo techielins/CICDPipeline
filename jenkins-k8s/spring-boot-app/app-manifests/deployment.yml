@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: techielins/java-maven-cicd:replaceImageTag
+        image: techielins/spring-boot-demo:replaceImageTag
         ports:
         - containerPort: 8080
