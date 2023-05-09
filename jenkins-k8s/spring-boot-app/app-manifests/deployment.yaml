@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: techielins/spring-boot-demo:31   #31 has to be replaced with exact tag of the image for deployment using ArgoCD. There are couple of ways you can
+        image: techielins/spring-boot-demo:replaceImageTag   #replaceImageTag has to be replaced with exact tag of the image for deployment using ArgoCD. There are couple of ways you can
                                                              #automate this stuff.
         ports:
         - containerPort: 8080
