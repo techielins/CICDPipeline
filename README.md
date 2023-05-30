@@ -1,4 +1,4 @@
-This is a Jenkins pipeline that automates the entire CI/CD process for a Java application using popular tools like Maven, SonarQube, Argo CD, and Kubernetes. It includes the following steps:
+# This is a Jenkins pipeline that automates the entire CI/CD process for a Java application using popular tools like Maven, SonarQube, Argo CD, and Kubernetes. It includes the following steps:
 
 1. Setting up an EC2 instance in AWS: This step explains how to set up an EC2 instance in AWS, which will be used as the Jenkins server.
 
