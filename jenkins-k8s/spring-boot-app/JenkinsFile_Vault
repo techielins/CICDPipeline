@@ -1,0 +1,65 @@
+//Jenkins Pipeline file
+
+pipeline {
+
+  agent {
+    docker {
+      image 'techielins/docker-jenkins-agent:v1'
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
+    }
+  }
+    environment {
+        DOCKER_IMAGE = "" // Initialize the DOCKER_IMAGE variable
+    }
+
+  stages {
+      
+    // checkout the code  
+    stage('Get Code') {
+      steps {
+       sh 'cat /etc/issue'
+       sh 'git --version'
+       sh 'which git'
+       sh 'echo $PATH'
+       sh 'docker --version'
+       sh 'mvn --version'
+
+        git branch: 'main', url: 'https://github.com/techielins/CICDPipeline.git'
+              }
+    }
+    
+    // build the project and create the JAR file
+    stage('Build and Test') {
+      steps {
+        
+        sh 'cd jenkins-k8s/spring-boot-app && mvn clean package'
+        sh 'ls -ltr jenkins-k8s'
+      }
+    }
+stage('Build Docker Image') {
+
+      steps {
+        script {
+            DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
+            //Docker file location jenkins-k8s/spring-boot-app/Dockerfile"
+            sh "cd jenkins-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} ."
+
+        }
+      }
+    }
+    
+      stage('Push Docker Image') {
+        steps {
+        withVault(configuration: [timeout: 60, vaultCredentialId: 'vault-token', vaultUrl: 'http://vault.ciserver.local:8200'], vaultSecrets: [[path: 'secrets/dockerhub', secretValues: [[vaultKey: 'dockerhub_login'], [vaultKey: 'dockerhub_password']]]]) {
+    sh "docker login -u $dockerhub_login -p $dockerhub_password"
+    sh "docker push ${DOCKER_IMAGE}"
+ 
+    }  
+        } 
+    
+
+  }
+
+    
+}
+}
