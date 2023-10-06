@@ -1,0 +1,107 @@
+pipeline {
+  agent {
+    docker {
+      image 'techielins/docker-jenkins-agent:v1'
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
+
+  stages {
+    stage('Get Code') {
+      steps {
+        try {
+          sh 'cat /etc/issue'
+          sh 'git --version'
+          sh 'which git'
+          sh 'echo $PATH'
+          sh 'docker --version'
+          sh 'mvn --version'
+
+          git branch: 'main', url: 'https://github.com/techielins/CICDPipeline.git'
+        } catch (Exception e) {
+          // Handle failure, e.g., log an error message
+          currentBuild.result = 'FAILURE'
+          error("Failed to get code: ${e.message}")
+        }
+      }
+    }
+
+    stage('Build and Test') {
+      steps {
+        try {
+          sh 'cd jenkins-k8s/spring-boot-app && mvn clean package'
+          sh 'ls -ltr jenkins-k8s'
+        } catch (Exception e) {
+          // Handle failure, e.g., log an error message
+          currentBuild.result = 'FAILURE'
+          error("Failed to build and test: ${e.message}")
+        }
+      }
+    }
+
+    stage('Build and Push Docker Image') {
+      environment {
+        DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
+        REGISTRY_CREDENTIALS = credentials('docker_creds')
+      }
+      steps {
+        try {
+          script {
+            sh 'cd jenkins-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://index.docker.io/v1/', "docker_creds") {
+              dockerImage.push()
+            }
+          }
+        } catch (Exception e) {
+          // Handle failure, e.g., log an error message
+          currentBuild.result = 'FAILURE'
+          error("Failed to build and push Docker image: ${e.message}")
+        }
+      }
+    }
+
+    stage('Update Deployment Manifest File') {
+      environment {
+        GIT_REPO_NAME = "CICDPipeline"
+        GIT_USER_NAME = "techielins"
+      }
+      steps {
+        try {
+          withCredentials([string(credentialsId: 'github_creds', variable: 'GITHUB_TOKEN')]) {
+            sh '''
+              pwd
+              ls -lart
+              git config user.email "68058598+techielins@users.noreply.github.com"
+              git config user.name "techielins"
+              BUILD_NUMBER=${BUILD_NUMBER}
+              sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" jenkins-k8s/spring-boot-app/app-manifests/deployment.yaml
+              git add jenkins-k8s/spring-boot-app/app-manifests/deployment.yaml
+              git commit -m "Update the tag of image to version ${BUILD_NUMBER}"
+              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+            '''
+          }
+        } catch (Exception e) {
+          // Handle failure, e.g., log an error message
+          currentBuild.result = 'FAILURE'
+          error("Failed to update deployment manifest file: ${e.message}")
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      // Add a post-failure stage to delete the Docker container
+      stage('Delete Docker Container') {
+        steps {
+          script {
+            def containerName = "my-container-name" // Replace with the actual container name
+            sh "docker stop ${containerName}" // Stop the container
+            sh "docker rm ${containerName}"   // Remove the container
+          }
+        }
+      }
+    }
+  }
+}
