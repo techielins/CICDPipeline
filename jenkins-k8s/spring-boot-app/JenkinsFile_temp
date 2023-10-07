@@ -6,7 +6,9 @@ pipeline {
         }
     }
             environment {
-                DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
+                RELEASE_NAME = "RELEASE"
+                RELEASE_VERSION = "1.0.0"
+                DOCKER_IMAGE = "techielins/spring-boot-demo:${RELEASE_NAME}-${RELEASE_VERSION}-${BUILD_NUMBER}"
                 REGISTRY_CREDENTIALS = credentials('docker_creds')
                 CONTAINER_NAME = "my-container-name" // Define the container name
             }
