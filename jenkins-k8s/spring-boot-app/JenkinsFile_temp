@@ -5,6 +5,11 @@ pipeline {
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
+            environment {
+                DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
+                REGISTRY_CREDENTIALS = credentials('docker_creds')
+                CONTAINER_NAME = "my-container-name" // Define the container name
+            }
 
     stages {
         stage('Get Code') {
@@ -32,11 +37,7 @@ pipeline {
         }
 
         stage('Build and Push Docker Image') {
-            environment {
-                DOCKER_IMAGE = "techielins/spring-boot-demo:${BUILD_NUMBER}"
-                REGISTRY_CREDENTIALS = credentials('docker_creds')
-                CONTAINER_NAME = "my-container-name" // Define the container name
-            }
+
             steps {
                 catchError(buildResult: 'FAILURE') {
                     script {
