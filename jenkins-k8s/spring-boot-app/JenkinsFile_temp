@@ -44,10 +44,6 @@ pipeline {
             docker.withRegistry('https://index.docker.io/v1/', "docker_creds") {
               dockerImage.push()
             }
-            
-            // Remove older image versions
-            def latestTag = "latest"
-            docker.image("techielins/spring-boot-demo").remove("${latestTag}", force: true)
           }
         }
       }
@@ -79,14 +75,6 @@ pipeline {
   }
 
   post {
-    success {
-      // Remove all other image versions except the latest one
-      script {
-        def latestTag = "latest"
-        docker.image("techielins/spring-boot-demo:${BUILD_NUMBER}").tag("${latestTag}")
-      }
-    }
-    
     failure {
       // Add a post-failure stage to delete the Docker container
       script {
